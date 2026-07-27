@@ -1,3 +1,30 @@
+<?php
+session_start();
+require "db.php";
+
+$msg = "";
+$msgClass = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = trim(strtolower($_POST["email"] ?? ""));
+    $pass  = $_POST["pass"] ?? "";
+
+    $stmt = mysqli_prepare($conn, "SELECT id, name, password FROM users WHERE email = ?");
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $uid, $uname, $uhash);
+
+    if (mysqli_stmt_fetch($stmt) && password_verify($pass, $uhash)) {
+        $_SESSION["uid"]   = $uid;
+        $_SESSION["uname"] = $uname;
+        header("Location: dashboard.php");
+        exit;
+    } else {
+        $msg = "Invalid email or password."; $msgClass = "err";
+    }
+    mysqli_stmt_close($stmt);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +44,8 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="login.html" class="active">Login</a></li>
-          <li><a href="register.html">Register</a></li>
+          <li><a href="login.php" class="active">Login</a></li>
+          <li><a href="register.php">Register</a></li>
         </ul>
       </nav>
     </div>
@@ -28,20 +55,18 @@
     <div class="card form-wrap">
       <h2 class="section-title" style="text-align:center;">Login to Support Portal</h2>
       <p class="section-sub" style="text-align:center;">Access the ticket database.</p>
-      <div id="log-msg"></div>
-      <form onsubmit="return loginUser(event)">
+      <?php if ($msg): ?><div class="alert <?= $msgClass ?>"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
+      <form method="post" action="login.php">
         <label for="log-email">Email</label>
-        <input type="email" id="log-email" required />
+        <input type="email" id="log-email" name="email" required />
         <label for="log-pass">Password</label>
-        <input type="password" id="log-pass" required />
-        <br />
+        <input type="password" id="log-pass" name="pass" required />
         <button type="submit" class="btn" style="width:100%; margin-top:16px;">Login</button>
       </form>
-      <p class="note">Don't have an account? <a href="register.html">Register here</a></p>
+      <p class="note">Don't have an account? <a href="register.php">Register here</a></p>
     </div>
   </div>
 
   <footer>&copy; 2026 TechNova Solutions. Built by Group of 7.</footer>
-  <script src="js/auth.js"></script>
 </body>
 </html>
