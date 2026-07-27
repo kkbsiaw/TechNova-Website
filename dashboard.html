@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechNova Solutions — Support Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/logo.svg" />
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand"><img src="images/logo.svg" alt="TechNova logo" />Tech<span>Nova</span></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="#" onclick="logout(); return false;">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Support Ticket Database</h1>
+    <p id="welcome">IT Support Information System — Add, Retrieve, Update &amp; Delete records.</p>
+  </section>
+
+  <div class="container">
+    <div id="db-msg" class="alert ok" style="display:none;"></div>
+
+    <!-- ===== Add / Update form ===== -->
+    <div class="card form-wrap" style="max-width:640px;">
+      <h2 class="section-title" id="form-title">Add New Ticket</h2>
+      <form id="ticket-form" onsubmit="return saveTicket(event)">
+        <div class="form-row">
+          <div>
+            <label for="t-client">Client Name</label>
+            <input type="text" id="t-client" required />
+          </div>
+          <div>
+            <label for="t-device">Device</label>
+            <input type="text" id="t-device" placeholder="e.g. Dell Laptop" required />
+          </div>
+        </div>
+        <label for="t-issue">Issue Description</label>
+        <input type="text" id="t-issue" required />
+        <div class="form-row">
+          <div>
+            <label for="t-priority">Priority</label>
+            <select id="t-priority">
+              <option>Low</option>
+              <option selected>Medium</option>
+              <option>High</option>
+            </select>
+          </div>
+          <div>
+            <label for="t-status">Status</label>
+            <select id="t-status">
+              <option selected>Open</option>
+              <option>In Progress</option>
+              <option>Resolved</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button type="submit" class="btn" id="save-btn">Add Record</button>
+          <button type="button" class="btn gray" id="cancel-btn" style="display:none;" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ===== Retrieve: records table ===== -->
+    <h2 class="section-title">All Support Tickets</h2>
+    <p class="section-sub">The Retrieve function displays every record in the table below.</p>
+    <p id="empty-msg" class="section-sub" style="display:none;">No records yet — add one above.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Client</th><th>Device</th><th>Issue</th>
+            <th>Priority</th><th>Status</th><th>Date</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ticket-body"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn alt" onclick="renderTable()">🔄 Retrieve / Refresh Records</button>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 TechNova Solutions. Built by Group of 7.</footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/database.js"></script>
+  <script>
+    // Protect page + initialise the table
+    var user = requireLogin();
+    if (user) {
+      document.getElementById("welcome").textContent =
+        "Welcome, " + user.name + " — Add, Retrieve, Update & Delete support records.";
+      seedIfEmpty();
+      renderTable();
+    }
+  </script>
+</body>
+</html>

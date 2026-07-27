@@ -1,0 +1,208 @@
+/* ===== TechNova Solutions - Global Styles ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --brand: #4f46e5;
+  --brand-2: #0ea5e9;
+  --dark: #0f172a;
+  --light: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  color: var(--text);
+  background: var(--light);
+  line-height: 1.6;
+}
+
+/* ===== Header / Navigation ===== */
+header {
+  background: var(--dark);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+}
+.nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; }
+.brand img { width: 40px; height: 40px; border-radius: 10px; }
+.brand span { color: var(--brand-2); }
+nav ul { list-style: none; display: flex; gap: 6px; flex-wrap: wrap; }
+nav a {
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: .2s;
+}
+nav a:hover, nav a.active { background: var(--brand); color: #fff; }
+
+/* ===== Scrolling marquee ===== */
+.ticker {
+  background: var(--brand-2);
+  color: #04263a;
+  font-weight: 700;
+  padding: 8px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker span { display: inline-block; padding-left: 100%; }
+
+/* ===== Layout ===== */
+.container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+.hero {
+  background: linear-gradient(135deg, var(--brand), var(--dark));
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+}
+.hero h1 { font-size: 2.4rem; margin-bottom: 10px; }
+.hero p { opacity: .9; max-width: 700px; margin: 0 auto; }
+
+h2.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+  color: var(--dark);
+}
+.section-sub { color: var(--muted); margin-bottom: 24px; }
+
+/* ===== Slideshow ===== */
+.slideshow { max-width: 900px; margin: 0 auto 10px; position: relative; }
+.slideshow img {
+  width: 100%;
+  border-radius: 16px;
+  display: none;
+  box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+.slideshow img.show { display: block; }
+.slide-controls { text-align: center; margin: 14px 0; }
+.dot {
+  height: 12px; width: 12px; margin: 0 4px; background: #cbd5e1;
+  border-radius: 50%; display: inline-block; cursor: pointer; transition: .2s;
+}
+.dot.active { background: var(--brand); }
+
+/* ===== Team grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
+}
+.member {
+  background: var(--card);
+  border-radius: 14px;
+  text-align: center;
+  padding: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  transition: transform .2s, box-shadow .2s;
+}
+.member:hover { transform: translateY(-5px); box-shadow: 0 10px 22px rgba(0,0,0,.12); }
+.member img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--light); }
+.member h3 { margin-top: 12px; font-size: 1.05rem; }
+.member .id { color: var(--brand); font-weight: 700; font-size: .85rem; margin-top: 4px; }
+
+/* ===== Cards / info ===== */
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 26px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  margin-bottom: 20px;
+}
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 18px; }
+
+/* ===== Buttons ===== */
+.btn {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: .95rem;
+  transition: .2s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn:hover { background: #4338ca; }
+.btn.alt { background: var(--brand-2); color: #04263a; }
+.btn.alt:hover { background: #0284c7; color: #fff; }
+.btn.danger { background: #dc2626; }
+.btn.danger:hover { background: #b91c1c; }
+.btn.gray { background: #64748b; }
+
+/* ===== Forms ===== */
+.form-wrap { max-width: 440px; margin: 0 auto; }
+label { display: block; font-weight: 600; margin: 12px 0 4px; }
+input, textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: .95rem;
+  font-family: inherit;
+}
+input:focus, textarea:focus { outline: 2px solid var(--brand); border-color: transparent; }
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.form-row > div { flex: 1; min-width: 140px; }
+.note { font-size: .85rem; color: var(--muted); margin-top: 10px; text-align: center; }
+.note a { color: var(--brand); }
+
+/* ===== Table ===== */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; }
+th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: .9rem; }
+th { background: var(--dark); color: #fff; }
+tr:hover td { background: #f8fafc; }
+.actions-cell { display: flex; gap: 6px; }
+.actions-cell button { padding: 6px 10px; font-size: .8rem; }
+
+/* ===== Popups / Modal ===== */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,.6);
+  z-index: 100;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 16px; max-width: 460px; width: 100%;
+  padding: 28px; box-shadow: 0 20px 50px rgba(0,0,0,.3);
+  animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { margin-bottom: 8px; color: var(--brand); }
+.modal .modal-actions { margin-top: 18px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ===== Alerts ===== */
+.alert { padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; }
+.alert.ok { background: #dcfce7; color: #166534; }
+.alert.err { background: #fee2e2; color: #991b1b; }
+
+/* ===== Footer ===== */
+footer {
+  background: var(--dark); color: #94a3b8; text-align: center;
+  padding: 24px 20px; margin-top: 30px; font-size: .9rem;
+}
+footer a { color: var(--brand-2); text-decoration: none; }
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.8rem; }
+  nav ul { justify-content: center; }
+}

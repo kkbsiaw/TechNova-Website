@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechNova Solutions — Home</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/logo.svg" />
+</head>
+<body>
+  <!-- ===== Header / Navigation (Req 1) ===== -->
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <img src="images/logo.svg" alt="TechNova logo" />
+        Tech<span>Nova</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>       <!-- Req 2 -->
+          <li><a href="contact.html">Contact</a></li>    <!-- Req 3 -->
+          <li><a href="login.html">Login</a></li>        <!-- Req 7 -->
+          <li><a href="register.html">Register</a></li>  <!-- Req 7 -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Scrolling text (Req 5) ===== -->
+  <div class="ticker">
+    <span>🚀 Welcome to TechNova Solutions — Your trusted IT partner &nbsp; • &nbsp; 24/7 Support Desk &nbsp; • &nbsp; Cloud • Cybersecurity • Networking &nbsp; • &nbsp; Log in to open a support ticket today!</span>
+  </div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <h1>TechNova Solutions</h1>
+    <p>Delivering smart, reliable and secure IT services to businesses across the region.</p>
+  </section>
+
+  <div class="container">
+    <!-- ===== Image swap / slideshow, max 5 images (Req 6) ===== -->
+    <h2 class="section-title">What We Do</h2>
+    <p class="section-sub">Auto-rotating showcase (click the dots to swap images manually).</p>
+    <div class="slideshow">
+      <img src="images/slide1.svg" class="show" alt="Innovating IT" />
+      <img src="images/slide2.svg" alt="24/7 Support" />
+      <img src="images/slide3.svg" alt="Cloud Solutions" />
+      <img src="images/slide4.svg" alt="Cybersecurity" />
+      <img src="images/slide5.svg" alt="Trusted Partner" />
+    </div>
+    <div class="slide-controls">
+      <span class="dot active" onclick="currentSlide(0)"></span>
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+      <span class="dot" onclick="currentSlide(3)"></span>
+      <span class="dot" onclick="currentSlide(4)"></span>
+    </div>
+
+    <!-- ===== Pop-up demos (Req 4: three pop-ups) ===== -->
+    <div class="card" style="text-align:center;">
+      <h2 class="section-title">Interactive Pop-ups</h2>
+      <p class="section-sub">Demonstration of three JavaScript pop-ups.</p>
+      <button class="btn" onclick="alert('ℹ️ Pop-up 1 (alert): TechNova has served 500+ clients since 2015!')">Pop-up 1: Alert</button>
+      <button class="btn alt" onclick="openModal('infoModal')">Pop-up 2: Modal</button>
+      <button class="btn gray" onclick="confirmPopup()">Pop-up 3: Confirm</button>
+      <p class="section-sub" style="margin-top:14px;">A welcome <b>alert</b> pop-up also fires automatically when the page loads.</p>
+    </div>
+
+    <!-- ===== Team profiles: 13 members (Req 1) ===== -->
+    <h2 class="section-title">Meet Our Team</h2>
+    <p class="section-sub">Group members — Picture, Full Name and ID.</p>
+    <div class="grid">
+      <div class="member"><img src="images/Francis K Amponsah-Siaw.jpg" alt="Francis K. Amponsah-Siaw" /><h3>Francis K. Amponsah-Siaw</h3><div class="id">MS/ITE/25/0001</div></div>
+      <div class="member"><img src="images/Peter Effah Otoo.jpg" alt="Peter Effah Otoo" /><h3>Peter Effah Otoo</h3><div class="id">MS/ITE/25/0009</div></div>
+      <div class="member"><img src="images/Yaw Amponsah Kankam.jpg" alt="Yaw Amponsah Kankam" /><h3>Yaw Amponsah Kankam</h3><div class="id">MS/ITE/25/0015</div></div>
+      <div class="member"><img src="images/BRIGHT SAAH.jpg" alt="Bright Saah" /><h3>Bright Saah</h3><div class="id">MS/ITE/25/0024</div></div>
+      <div class="member"><img src="images/Fredrick Barnaby Dodoo.jpg" alt="Fredrick Barnaby Dodoo" /><h3>Fredrick Barnaby Dodoo</h3><div class="id">MS/ITE/25/0027</div></div>
+      <div class="member"><img src="images/EBENEZER DUKU-AFFUL.jpg" alt="Duke-Afful Ebenezer" /><h3>Duke-Afful Ebenezer</h3><div class="id">MS/ITE/25/0028</div></div>
+      <div class="member"><img src="images/Freeman Darko.jpg" alt="Freeman Darko" /><h3>Freeman Darko</h3><div class="id">MS/ITE/25/0040</div></div>
+    </div>
+  </div>
+
+  <!-- ===== Modal (Pop-up 2) ===== -->
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal">
+      <h3>About TechNova</h3>
+      <p>We are a team of 13 IT specialists providing support, cloud, networking and security services. Register and log in to open a support ticket!</p>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal('infoModal')">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 TechNova Solutions. Built by Group of 7. &nbsp;|&nbsp;
+    <a href="contact.html">Contact us</a>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

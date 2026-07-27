@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechNova Solutions — Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/logo.svg" />
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand"><img src="images/logo.svg" alt="TechNova logo" />Tech<span>Nova</span></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="login.html" class="active">Login</a></li>
+          <li><a href="register.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="card form-wrap">
+      <h2 class="section-title" style="text-align:center;">Login to Support Portal</h2>
+      <p class="section-sub" style="text-align:center;">Access the ticket database.</p>
+      <div id="log-msg"></div>
+      <form onsubmit="return loginUser(event)">
+        <label for="log-email">Email</label>
+        <input type="email" id="log-email" required />
+        <label for="log-pass">Password</label>
+        <input type="password" id="log-pass" required />
+        <br />
+        <button type="submit" class="btn" style="width:100%; margin-top:16px;">Login</button>
+      </form>
+      <p class="note">Don't have an account? <a href="register.html">Register here</a></p>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 TechNova Solutions. Built by Group of 7.</footer>
+  <script src="js/auth.js"></script>
+</body>
+</html>
