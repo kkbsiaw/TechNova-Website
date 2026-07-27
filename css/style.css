@@ -50,6 +50,20 @@ nav a {
 }
 nav a:hover, nav a.active { background: var(--brand); color: #fff; }
 
+/* Hamburger toggle (hidden on desktop) */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.hamburger:hover { background: var(--brand); }
+
 /* ===== Scrolling marquee ===== */
 .ticker {
   background: var(--brand-2);
@@ -202,7 +216,28 @@ footer {
 }
 footer a { color: var(--brand-2); text-decoration: none; }
 
+/* Mobile: collapse nav into a hamburger dropdown */
+@media (max-width: 760px) {
+  .nav { position: relative; }
+  .hamburger { display: block; }
+  nav ul {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 12px;
+    left: 12px;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--dark);
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 10px 26px rgba(0,0,0,.4);
+    z-index: 60;
+  }
+  nav ul.open { display: flex; }
+  nav a { display: block; }
+}
+
 @media (max-width: 600px) {
   .hero h1 { font-size: 1.8rem; }
-  nav ul { justify-content: center; }
 }
