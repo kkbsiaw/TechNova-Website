@@ -19,10 +19,10 @@ if (strpos($host, "localhost") !== false || strpos($host, "127.0.0.1") !== false
        Replace the 4 values below with the details from your
        InfinityFree control panel -> "MySQL Databases".
        (Leave the local block above unchanged.)                */
-    $DB_HOST = "sqlXXX.infinityfree.com";     // MySQL host name (e.g. sql200.infinityfree.com)
-    $DB_USER = "if0_42523368";                // MySQL username (usually your account id)
-    $DB_PASS = "YOUR_DB_PASSWORD";            // MySQL / account password
-    $DB_NAME = "if0_42523368_technova";       // the database name you created
+    $DB_HOST = "sql110.infinityfree.com";     // MySQL host name
+    $DB_USER = "if0_42523368";                // MySQL username
+    $DB_PASS = "";                            // <-- set your MySQL password locally (kept out of git)
+    $DB_NAME = "if0_42523368_XXX";            // database name (replace XXX if not literal)
 }
 
 // Create the connection
