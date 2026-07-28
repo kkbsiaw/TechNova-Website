@@ -7,11 +7,18 @@ if (!isset($_SESSION["uid"])) {
     header("Location: login.php");
     exit;
 }
-$uname = $_SESSION["uname"];
+$uname   = $_SESSION["uname"];
+$isAdmin = (($_SESSION["role"] ?? "user") === "admin");
 
 $msg = "";
 $msgClass = "ok";
 $editRow = null;   // holds a record when we are updating
+
+// Message shown when a non-admin is bounced from the admin panel
+if (isset($_GET["denied"])) {
+    $msg = "Access denied: the Admin Panel is for administrators only.";
+    $msgClass = "err";
+}
 
 // ---------- Handle ADD / UPDATE (POST) ----------
 if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "save") {
@@ -86,6 +93,7 @@ function h($v) { return htmlspecialchars($v ?? ""); }
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
+          <?php if ($isAdmin): ?><li><a href="admin.php">Admin</a></li><?php endif; ?>
           <li><a href="logout.php">Logout</a></li>
         </ul>
       </nav>

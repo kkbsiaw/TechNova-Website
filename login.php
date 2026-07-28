@@ -9,14 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim(strtolower($_POST["email"] ?? ""));
     $pass  = $_POST["pass"] ?? "";
 
-    $stmt = mysqli_prepare($conn, "SELECT id, name, password FROM users WHERE email = ?");
+    $stmt = mysqli_prepare($conn, "SELECT id, name, password, role FROM users WHERE email = ?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $uid, $uname, $uhash);
+    mysqli_stmt_bind_result($stmt, $uid, $uname, $uhash, $urole);
 
     if (mysqli_stmt_fetch($stmt) && password_verify($pass, $uhash)) {
         $_SESSION["uid"]   = $uid;
         $_SESSION["uname"] = $uname;
+        $_SESSION["role"]  = $urole;
         header("Location: dashboard.php");
         exit;
     } else {
