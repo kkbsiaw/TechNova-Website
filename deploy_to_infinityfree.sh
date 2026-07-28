@@ -34,6 +34,19 @@ fi
 
 echo "Uploading to ftp://$FTP_HOST/$REMOTE_DIR/ ..."
 
+# URL-encode a path for use in an FTP URL (keeps '/', encodes spaces etc.)
+urlencode_path() {
+  local s="$1" out="" i c
+  for (( i=0; i<${#s}; i++ )); do
+    c="${s:i:1}"
+    case "$c" in
+      [a-zA-Z0-9._~/-]) out+="$c" ;;
+      *) printf -v c '%%%02X' "'$c"; out+="$c" ;;
+    esac
+  done
+  printf '%s' "$out"
+}
+
 # Collect the files to deploy (php, css, js, images, the hosting SQL).
 # Excludes: .git, README, local-only database.sql, this script, dotfiles.
 find . -type f \
@@ -44,7 +57,7 @@ while IFS= read -r -d '' f; do
   rel="${f#./}"
   printf '  -> %s\n' "$rel"
   curl -sS --ftp-create-dirs -T "$f" \
-       "ftp://$FTP_HOST/$REMOTE_DIR/$rel" --user "$FTP_USER:$FTP_PASS" \
+       "ftp://$FTP_HOST/$REMOTE_DIR/$(urlencode_path "$rel")" --user "$FTP_USER:$FTP_PASS" \
     || { echo "FAILED on $rel"; exit 1; }
 done
 
