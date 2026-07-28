@@ -1,10 +1,15 @@
+<?php
+session_start();
+$isAdmin  = (($_SESSION["role"] ?? "") === "admin");
+$loggedIn = isset($_SESSION["uid"]);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — About</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -14,11 +19,17 @@
       <nav>
         <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', document.getElementById('navMenu').classList.toggle('open'))">&#9776;</button>
         <ul id="navMenu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html" class="active">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="login.php">Login</a></li>
-          <li><a href="register.php">Register</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.php" class="active">About</a></li>
+          <li><a href="contact.php">Contact</a></li>
+          <?php if ($loggedIn): ?>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <?php if ($isAdmin): ?><li><a href="admin.php">Admin</a></li><?php endif; ?>
+            <li><a href="logout.php">Logout</a></li>
+          <?php else: ?>
+            <li><a href="login.php">Login</a></li>
+            <li><a href="register.php">Register</a></li>
+          <?php endif; ?>
         </ul>
       </nav>
     </div>
@@ -67,7 +78,7 @@
     </div>
   </div>
 
-  <footer>&copy; 2026 TechNova Solutions. Built by Group of 7. &nbsp;|&nbsp; <a href="contact.html">Contact us</a></footer>
+  <footer>&copy; 2026 TechNova Solutions. Built by Group of 7. &nbsp;|&nbsp; <a href="contact.php">Contact us</a></footer>
   <script src="js/script.js"></script>
 </body>
 </html>

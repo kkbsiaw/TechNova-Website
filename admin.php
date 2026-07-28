@@ -43,6 +43,19 @@ if ($action && $tid > 0) {
             mysqli_stmt_execute($stmt);
             $msg = "User #$tid deleted.";
         }
+    } elseif ($action === "activate") {
+        $stmt = mysqli_prepare($conn, "UPDATE users SET status='active' WHERE id=?");
+        mysqli_stmt_bind_param($stmt, "i", $tid);
+        mysqli_stmt_execute($stmt);
+        $msg = "Account #$tid activated — the user can now log in.";
+    } elseif ($action === "deactivate") {
+        if ($tid === $me) { $msg = "You cannot deactivate your own account."; $mcls = "err"; }
+        else {
+            $stmt = mysqli_prepare($conn, "UPDATE users SET status='pending' WHERE id=?");
+            mysqli_stmt_bind_param($stmt, "i", $tid);
+            mysqli_stmt_execute($stmt);
+            $msg = "Account #$tid deactivated — the user can no longer log in.";
+        }
     }
 }
 
@@ -53,12 +66,12 @@ function scalar($conn, $sql) {
     return $row[0];
 }
 $totalUsers  = scalar($conn, "SELECT COUNT(*) FROM users");
+$pendingUsers= scalar($conn, "SELECT COUNT(*) FROM users WHERE status='pending'");
 $totalAdmins = scalar($conn, "SELECT COUNT(*) FROM users WHERE role='admin'");
 $totalTix    = scalar($conn, "SELECT COUNT(*) FROM tickets");
-$openTix     = scalar($conn, "SELECT COUNT(*) FROM tickets WHERE status='Open'");
 
 // ---------- All users ----------
-$users = mysqli_query($conn, "SELECT id, name, email, role, created FROM users ORDER BY id ASC");
+$users = mysqli_query($conn, "SELECT id, name, email, role, status, created FROM users ORDER BY id ASC");
 
 function h($v) { return htmlspecialchars($v ?? ""); }
 ?>
@@ -68,7 +81,7 @@ function h($v) { return htmlspecialchars($v ?? ""); }
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — Admin Panel</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -78,7 +91,7 @@ function h($v) { return htmlspecialchars($v ?? ""); }
       <nav>
         <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', document.getElementById('navMenu').classList.toggle('open'))">&#9776;</button>
         <ul id="navMenu">
-          <li><a href="index.html">Home</a></li>
+          <li><a href="index.php">Home</a></li>
           <li><a href="dashboard.php">Dashboard</a></li>
           <li><a href="admin.php" class="active">Admin</a></li>
           <li><a href="logout.php">Logout</a></li>
@@ -102,16 +115,16 @@ function h($v) { return htmlspecialchars($v ?? ""); }
         <p class="section-sub" style="margin:0;">Total Users</p>
       </div>
       <div class="card" style="text-align:center;">
+        <h2 class="section-title" style="font-size:2.2rem; color:<?= $pendingUsers>0 ? '#d97706' : 'var(--dark)' ?>;"><?= h($pendingUsers) ?></h2>
+        <p class="section-sub" style="margin:0;">Pending Approval</p>
+      </div>
+      <div class="card" style="text-align:center;">
         <h2 class="section-title" style="font-size:2.2rem;"><?= h($totalAdmins) ?></h2>
         <p class="section-sub" style="margin:0;">Administrators</p>
       </div>
       <div class="card" style="text-align:center;">
         <h2 class="section-title" style="font-size:2.2rem;"><?= h($totalTix) ?></h2>
         <p class="section-sub" style="margin:0;">Total Tickets</p>
-      </div>
-      <div class="card" style="text-align:center;">
-        <h2 class="section-title" style="font-size:2.2rem;"><?= h($openTix) ?></h2>
-        <p class="section-sub" style="margin:0;">Open Tickets</p>
       </div>
     </div>
 
@@ -121,7 +134,7 @@ function h($v) { return htmlspecialchars($v ?? ""); }
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr>
+          <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Registered</th><th>Actions</th></tr>
         </thead>
         <tbody>
           <?php while ($u = mysqli_fetch_assoc($users)): ?>
@@ -136,8 +149,22 @@ function h($v) { return htmlspecialchars($v ?? ""); }
                 <span style="color:var(--muted);">User</span>
               <?php endif; ?>
             </td>
+            <td>
+              <?php if ($u["status"]==="active"): ?>
+                <span style="color:#16a34a;font-weight:700;">Active</span>
+              <?php else: ?>
+                <span style="color:#d97706;font-weight:700;">Pending</span>
+              <?php endif; ?>
+            </td>
             <td><?= h($u["created"]) ?></td>
             <td class="actions-cell">
+              <?php if ($u["status"]!=="active"): ?>
+                <a class="btn" href="admin.php?action=activate&id=<?= h($u["id"]) ?>"
+                   onclick="return confirm('Activate <?= h($u["name"]) ?>\'s account?');">Activate</a>
+              <?php elseif ($u["id"] != $me): ?>
+                <a class="btn gray" href="admin.php?action=deactivate&id=<?= h($u["id"]) ?>"
+                   onclick="return confirm('Deactivate <?= h($u["name"]) ?>\'s account? They will be unable to log in.');">Deactivate</a>
+              <?php endif; ?>
               <?php if ($u["role"]==="admin"): ?>
                 <?php if ($u["id"] != $me): ?>
                   <a class="btn gray" href="admin.php?action=demote&id=<?= h($u["id"]) ?>"

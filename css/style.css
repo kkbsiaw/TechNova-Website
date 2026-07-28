@@ -2,10 +2,10 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --brand: #4f46e5;
-  --brand-2: #0ea5e9;
-  --dark: #0f172a;
-  --light: #f1f5f9;
+  --brand: #059669;      /* emerald */
+  --brand-2: #14b8a6;    /* teal */
+  --dark: #064e3b;       /* deep emerald */
+  --light: #f0fdf9;      /* soft mint background */
   --card: #ffffff;
   --text: #1e293b;
   --muted: #64748b;
@@ -67,7 +67,7 @@ nav a:hover, nav a.active { background: var(--brand); color: #fff; }
 /* ===== Scrolling marquee ===== */
 .ticker {
   background: var(--brand-2);
-  color: #04263a;
+  color: #053b33;
   font-weight: 700;
   padding: 8px 0;
   overflow: hidden;
@@ -152,9 +152,9 @@ h2.section-title {
   text-decoration: none;
   display: inline-block;
 }
-.btn:hover { background: #4338ca; }
-.btn.alt { background: var(--brand-2); color: #04263a; }
-.btn.alt:hover { background: #0284c7; color: #fff; }
+.btn:hover { background: #047857; }
+.btn.alt { background: var(--brand-2); color: #053b33; }
+.btn.alt:hover { background: #0d9488; color: #fff; }
 .btn.danger { background: #dc2626; }
 .btn.danger:hover { background: #b91c1c; }
 .btn.gray { background: #64748b; }

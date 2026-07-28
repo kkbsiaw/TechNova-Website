@@ -30,8 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
             mysqli_stmt_bind_param($stmt, "sss", $name, $email, $hash);
             if (mysqli_stmt_execute($stmt)) {
-                $msg = "Account created! Redirecting to login..."; $msgClass = "ok";
-                header("refresh:1.2; url=login.php");
+                $msg = "Account created! Your account is pending administrator approval. "
+                     . "You'll be able to log in once an admin activates it.";
+                $msgClass = "ok";
             } else {
                 $msg = "Something went wrong. Please try again."; $msgClass = "err";
             }
@@ -46,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — Register</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -56,9 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <nav>
         <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', document.getElementById('navMenu').classList.toggle('open'))">&#9776;</button>
         <ul id="navMenu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.php">About</a></li>
+          <li><a href="contact.php">Contact</a></li>
           <li><a href="login.php">Login</a></li>
           <li><a href="register.php" class="active">Register</a></li>
         </ul>

@@ -20,21 +20,23 @@ CREATE TABLE IF NOT EXISTS users (
   id       INT AUTO_INCREMENT PRIMARY KEY,
   name     VARCHAR(100)  NOT NULL,
   email    VARCHAR(150)  NOT NULL UNIQUE,
-  password VARCHAR(255)  NOT NULL,                          -- stored hashed
-  role     ENUM('user','admin') NOT NULL DEFAULT 'user',    -- privilege level
+  password VARCHAR(255)  NOT NULL,                             -- stored hashed
+  role     ENUM('user','admin')    NOT NULL DEFAULT 'user',    -- privilege level
+  status   ENUM('pending','active') NOT NULL DEFAULT 'pending',-- new users await admin approval
   created  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ---------- A default administrator account ----------
+-- ---------- A default administrator account (already active) ----------
 -- Login:  admin@technova.com   Password:  admin123
 -- (Change this password after first login for security.)
-INSERT INTO users (name, email, password, role) VALUES
+INSERT INTO users (name, email, password, role, status) VALUES
   ('Administrator', 'admin@technova.com',
-   '$2y$10$hTJ0P2n2P2iW5xKJZY2P7ul4rWDhwylWccxgTBQO1U4SoKZxWA1ua', 'admin');
+   '$2y$10$hTJ0P2n2P2iW5xKJZY2P7ul4rWDhwylWccxgTBQO1U4SoKZxWA1ua', 'admin', 'active');
 
 -- ---------- Support Tickets (CRUD records) ----------
 CREATE TABLE IF NOT EXISTS tickets (
   id       INT AUTO_INCREMENT PRIMARY KEY,
+  user_id  INT NULL,                                     -- owner (who created the ticket)
   client   VARCHAR(120) NOT NULL,
   device   VARCHAR(120) NOT NULL,
   issue    VARCHAR(255) NOT NULL,

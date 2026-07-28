@@ -8,6 +8,7 @@ if (!isset($_SESSION["uid"])) {
     exit;
 }
 $uname   = $_SESSION["uname"];
+$uid     = intval($_SESSION["uid"]);
 $isAdmin = (($_SESSION["role"] ?? "user") === "admin");
 
 $msg = "";
@@ -30,47 +31,74 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "save"
     $status   = $_POST["status"] ?? "Open";
 
     if ($id > 0) {
-        // UPDATE existing record
-        $stmt = mysqli_prepare($conn,
-            "UPDATE tickets SET client=?, device=?, issue=?, priority=?, status=? WHERE id=?");
-        mysqli_stmt_bind_param($stmt, "sssssi", $client, $device, $issue, $priority, $status, $id);
+        // UPDATE — admins may edit any ticket; users only their own
+        if ($isAdmin) {
+            $stmt = mysqli_prepare($conn,
+                "UPDATE tickets SET client=?, device=?, issue=?, priority=?, status=? WHERE id=?");
+            mysqli_stmt_bind_param($stmt, "sssssi", $client, $device, $issue, $priority, $status, $id);
+        } else {
+            $stmt = mysqli_prepare($conn,
+                "UPDATE tickets SET client=?, device=?, issue=?, priority=?, status=? WHERE id=? AND user_id=?");
+            mysqli_stmt_bind_param($stmt, "sssssii", $client, $device, $issue, $priority, $status, $id, $uid);
+        }
         mysqli_stmt_execute($stmt);
-        $msg = "Record #$id updated.";
+        if (mysqli_stmt_affected_rows($stmt) > 0) {
+            $msg = "Record #$id updated.";
+        } else {
+            $msg = "You can only edit your own tickets."; $msgClass = "err";
+        }
     } else {
-        // ADD new record
+        // ADD — the new ticket is owned by the current user
         $today = date("Y-m-d");
         $stmt = mysqli_prepare($conn,
-            "INSERT INTO tickets (client, device, issue, priority, status, created) VALUES (?,?,?,?,?,?)");
-        mysqli_stmt_bind_param($stmt, "ssssss", $client, $device, $issue, $priority, $status, $today);
+            "INSERT INTO tickets (user_id, client, device, issue, priority, status, created) VALUES (?,?,?,?,?,?,?)");
+        mysqli_stmt_bind_param($stmt, "issssss", $uid, $client, $device, $issue, $priority, $status, $today);
         mysqli_stmt_execute($stmt);
         $msg = "Record added successfully.";
     }
     mysqli_stmt_close($stmt);
 }
 
-// ---------- Handle DELETE (GET) ----------
+// ---------- Handle DELETE (GET) — administrators only ----------
 if (($_GET["action"] ?? "") === "delete" && isset($_GET["id"])) {
-    $id = intval($_GET["id"]);
-    $stmt = mysqli_prepare($conn, "DELETE FROM tickets WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-    $msg = "Record #$id deleted.";
+    if (!$isAdmin) {
+        $msg = "Only administrators can delete tickets."; $msgClass = "err";
+    } else {
+        $id = intval($_GET["id"]);
+        $stmt = mysqli_prepare($conn, "DELETE FROM tickets WHERE id = ?");
+        mysqli_stmt_bind_param($stmt, "i", $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        $msg = "Record #$id deleted.";
+    }
 }
 
-// ---------- Load a record for editing (GET) ----------
+// ---------- Load a record for editing (GET) — users only their own ----------
 if (isset($_GET["edit"])) {
     $id = intval($_GET["edit"]);
-    $stmt = mysqli_prepare($conn, "SELECT id, client, device, issue, priority, status FROM tickets WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "i", $id);
+    if ($isAdmin) {
+        $stmt = mysqli_prepare($conn, "SELECT id, client, device, issue, priority, status FROM tickets WHERE id = ?");
+        mysqli_stmt_bind_param($stmt, "i", $id);
+    } else {
+        $stmt = mysqli_prepare($conn, "SELECT id, client, device, issue, priority, status FROM tickets WHERE id = ? AND user_id = ?");
+        mysqli_stmt_bind_param($stmt, "ii", $id, $uid);
+    }
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     $editRow = mysqli_fetch_assoc($res);
     mysqli_stmt_close($stmt);
+    if (!$editRow) { $msg = "You can only edit your own tickets."; $msgClass = "err"; }
 }
 
-// ---------- RETRIEVE all records ----------
-$tickets = mysqli_query($conn, "SELECT * FROM tickets ORDER BY id ASC");
+// ---------- RETRIEVE — admins see all tickets, users see only their own ----------
+if ($isAdmin) {
+    $tickets = mysqli_query($conn, "SELECT * FROM tickets ORDER BY id ASC");
+} else {
+    $stmt = mysqli_prepare($conn, "SELECT * FROM tickets WHERE user_id = ? ORDER BY id ASC");
+    mysqli_stmt_bind_param($stmt, "i", $uid);
+    mysqli_stmt_execute($stmt);
+    $tickets = mysqli_stmt_get_result($stmt);
+}
 
 function h($v) { return htmlspecialchars($v ?? ""); }
 ?>
@@ -80,7 +108,7 @@ function h($v) { return htmlspecialchars($v ?? ""); }
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — Support Portal</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -90,9 +118,9 @@ function h($v) { return htmlspecialchars($v ?? ""); }
       <nav>
         <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', document.getElementById('navMenu').classList.toggle('open'))">&#9776;</button>
         <ul id="navMenu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.php">About</a></li>
+          <li><a href="contact.php">Contact</a></li>
           <?php if ($isAdmin): ?><li><a href="admin.php">Admin</a></li><?php endif; ?>
           <li><a href="logout.php">Logout</a></li>
         </ul>
@@ -154,8 +182,10 @@ function h($v) { return htmlspecialchars($v ?? ""); }
     </div>
 
     <!-- ===== Retrieve: records table ===== -->
-    <h2 class="section-title">All Support Tickets</h2>
-    <p class="section-sub">The database returns every record in the table below.</p>
+    <h2 class="section-title"><?= $isAdmin ? "All Support Tickets" : "My Support Tickets" ?></h2>
+    <p class="section-sub"><?= $isAdmin
+        ? "As an administrator you can view, edit and delete every ticket below."
+        : "These are the tickets you created. You can add and edit your own tickets." ?></p>
     <?php if (mysqli_num_rows($tickets) === 0): ?>
       <p class="section-sub">No records yet — add one above.</p>
     <?php else: ?>
@@ -179,8 +209,10 @@ function h($v) { return htmlspecialchars($v ?? ""); }
             <td><?= h($row["created"]) ?></td>
             <td class="actions-cell">
               <a class="btn alt" href="dashboard.php?edit=<?= h($row["id"]) ?>">Update</a>
+              <?php if ($isAdmin): ?>
               <a class="btn danger" href="dashboard.php?action=delete&id=<?= h($row["id"]) ?>"
                  onclick="return confirm('Delete record #<?= h($row["id"]) ?>? This cannot be undone.');">Delete</a>
+              <?php endif; ?>
             </td>
           </tr>
           <?php endwhile; ?>

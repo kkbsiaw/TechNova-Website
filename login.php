@@ -9,17 +9,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim(strtolower($_POST["email"] ?? ""));
     $pass  = $_POST["pass"] ?? "";
 
-    $stmt = mysqli_prepare($conn, "SELECT id, name, password, role FROM users WHERE email = ?");
+    $stmt = mysqli_prepare($conn, "SELECT id, name, password, role, status FROM users WHERE email = ?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $uid, $uname, $uhash, $urole);
+    mysqli_stmt_bind_result($stmt, $uid, $uname, $uhash, $urole, $ustatus);
 
     if (mysqli_stmt_fetch($stmt) && password_verify($pass, $uhash)) {
-        $_SESSION["uid"]   = $uid;
-        $_SESSION["uname"] = $uname;
-        $_SESSION["role"]  = $urole;
-        header("Location: dashboard.php");
-        exit;
+        if ($ustatus !== "active") {
+            // Correct credentials, but the account has not been approved yet
+            $msg = "Your account is awaiting administrator approval. Please try again later.";
+            $msgClass = "err";
+        } else {
+            $_SESSION["uid"]   = $uid;
+            $_SESSION["uname"] = $uname;
+            $_SESSION["role"]  = $urole;
+            header("Location: dashboard.php");
+            exit;
+        }
     } else {
         $msg = "Invalid email or password."; $msgClass = "err";
     }
@@ -32,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — Login</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -42,9 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <nav>
         <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', document.getElementById('navMenu').classList.toggle('open'))">&#9776;</button>
         <ul id="navMenu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.php">About</a></li>
+          <li><a href="contact.php">Contact</a></li>
           <li><a href="login.php" class="active">Login</a></li>
           <li><a href="register.php">Register</a></li>
         </ul>
