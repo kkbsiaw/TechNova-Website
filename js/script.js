@@ -10,6 +10,29 @@ window.addEventListener("load", function () {
   }
 });
 
+/* ---------- Scrolling text (marquee) driven by JavaScript ---------- */
+function startTicker() {
+  var ticker = document.querySelector(".ticker");
+  if (!ticker) return;
+  var span = ticker.querySelector("span");
+  if (!span) return;
+
+  var pos = ticker.offsetWidth;       // start just off the right edge
+  var speed = 1.5;                    // pixels per frame
+
+  function step() {
+    pos -= speed;
+    // When the text has fully scrolled off the left, loop back to the right
+    if (pos < -span.offsetWidth) {
+      pos = ticker.offsetWidth;
+    }
+    span.style.transform = "translateX(" + pos + "px)";
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+window.addEventListener("load", startTicker);
+
 /* ---------- POP-UP #2: Custom modal dialog ---------- */
 function openModal(id) {
   var el = document.getElementById(id);

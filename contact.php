@@ -9,7 +9,7 @@ $loggedIn = isset($_SESSION["uid"]);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — Contact</title>
-  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -69,7 +69,7 @@ $loggedIn = isset($_SESSION["uid"]);
 
   <footer>&copy; 2026 TechNova Solutions. Built by Group of 7. &nbsp;|&nbsp; <a href="index.php">Home</a></footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=3"></script>
   <script>
     // Simple front-end demo handler (no server required)
     function sendMessage(e) {

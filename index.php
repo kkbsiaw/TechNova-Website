@@ -9,7 +9,7 @@ $loggedIn = isset($_SESSION["uid"]);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TechNova Solutions — Home</title>
-  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
   <link rel="icon" href="images/logo.svg" />
 </head>
 <body>
@@ -55,11 +55,11 @@ $loggedIn = isset($_SESSION["uid"]);
     <h2 class="section-title">What We Do</h2>
     <p class="section-sub">Auto-rotating showcase (click the dots to swap images manually).</p>
     <div class="slideshow">
-      <img src="images/slide1.svg" class="show" alt="Innovating IT" />
-      <img src="images/slide2.svg" alt="24/7 Support" />
-      <img src="images/slide3.svg" alt="Cloud Solutions" />
-      <img src="images/slide4.svg" alt="Cybersecurity" />
-      <img src="images/slide5.svg" alt="Trusted Partner" />
+      <img src="images/slide1.svg?v=3" class="show" alt="Innovating IT" />
+      <img src="images/slide2.svg?v=3" alt="24/7 Support" />
+      <img src="images/slide3.svg?v=3" alt="Cloud Solutions" />
+      <img src="images/slide4.svg?v=3" alt="Cybersecurity" />
+      <img src="images/slide5.svg?v=3" alt="Trusted Partner" />
     </div>
     <div class="slide-controls">
       <span class="dot active" onclick="currentSlide(0)"></span>
@@ -67,6 +67,42 @@ $loggedIn = isset($_SESSION["uid"]);
       <span class="dot" onclick="currentSlide(2)"></span>
       <span class="dot" onclick="currentSlide(3)"></span>
       <span class="dot" onclick="currentSlide(4)"></span>
+    </div>
+
+    <!-- ===== Our Services (icon cards) ===== -->
+    <h2 class="section-title" style="margin-top:36px;">Our Services</h2>
+    <p class="section-sub">Everything your business needs to run smarter and safer.</p>
+    <div class="cols">
+      <div class="card" style="text-align:center;">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="14" width="4" height="7" rx="1"/><rect x="18" y="14" width="4" height="7" rx="1"/><path d="M20 21a4 4 0 0 1-4 3h-3"/></svg></div>
+        <h3>IT Support &amp; Helpdesk</h3>
+        <p class="section-sub" style="margin:6px 0 0;">24/7 remote and on-site technical support for hardware and software.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 18a4 4 0 0 0 0-8 6 6 0 0 0-11.3-1.5A4.5 4.5 0 0 0 6 18z"/><path d="M12 21v-6M9.5 17.5 12 15l2.5 2.5"/></svg></div>
+        <h3>Cloud Solutions</h3>
+        <p class="section-sub" style="margin:6px 0 0;">Migration, hosting, and secure automated backups in the cloud.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V5z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Cybersecurity</h3>
+        <p class="section-sub" style="margin:6px 0 0;">Threat monitoring, firewalls, and staff security training.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M11 12l-4.5 5M13 12l4.5 5"/></svg></div>
+        <h3>Networking</h3>
+        <p class="section-sub" style="margin:6px 0 0;">Design and maintenance of secure office networks and Wi-Fi.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
+        <h3>Data Backup</h3>
+        <p class="section-sub" style="margin:6px 0 0;">Reliable, encrypted backups so you never lose critical data.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/><path d="M13 5l-2 14"/></svg></div>
+        <h3>Web Development</h3>
+        <p class="section-sub" style="margin:6px 0 0;">Modern, responsive websites and web apps for your business.</p>
+      </div>
     </div>
 
     <!-- ===== Pop-up demos (Req 4: three pop-ups) ===== -->
@@ -109,6 +145,6 @@ $loggedIn = isset($_SESSION["uid"]);
     <a href="contact.php">Contact us</a>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=3"></script>
 </body>
 </html>

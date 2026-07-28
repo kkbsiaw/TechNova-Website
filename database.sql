@@ -45,6 +45,16 @@ CREATE TABLE IF NOT EXISTS tickets (
   created  DATE NOT NULL
 );
 
+-- ---------- Ticket comments (admin responses / notes) ----------
+CREATE TABLE IF NOT EXISTS ticket_comments (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  ticket_id   INT NOT NULL,
+  author_id   INT NULL,
+  author_name VARCHAR(100) NOT NULL,
+  comment     TEXT NOT NULL,
+  created     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ---------- A couple of demo tickets to start with ----------
 INSERT INTO tickets (client, device, issue, priority, status, created) VALUES
   ('Ama Owusu', 'Dell Laptop', 'Wi-Fi not connecting', 'High',   'Open',        CURDATE()),
